@@ -26,6 +26,26 @@ if __name__ == "__main__":
 
     # Loads and cleans data
     df = basic_clean(load_df(args.data))
+
+    # Using only data from 2010-01-01 to 2024-12-31 if date is available
+    if "date" in df.columns:
+        df = df[(df["date"] >= "2008-01-01") & (df["date"] <= "2024-12-31")]
+    # Keeping only Villas and Apartments if the column exists
+    if "house_type" in df.columns:
+        df = df[df["house_type"].isin(["Villa", "Apartment"])]
+
+    # Remove extreme property sizes
+    if "sqm" in df.columns:
+        df = df[(df["sqm"] >= 30) & (df["sqm"] <= 400)]
+
+    if "sqm_price" in df.columns:
+        df = df[(df["sqm_price"] > 1000) & (df["sqm_price"] < 100000)]
+    
+    # Filter unrealistic construction years
+    if "year_build" in df.columns:
+        df = df[(df["year_build"] > 1850) & (df["year_build"] < 2025)]
+
+
     features, target = choose_features(df)
     df = df.dropna(subset=features + [target])  # removes missing data for fairness
 
