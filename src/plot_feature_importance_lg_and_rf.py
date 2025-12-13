@@ -4,11 +4,11 @@ import joblib
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from utils import load_df, basic_clean, choose_features
 
-# Indlæs data for at hente feature navne
+
 df = basic_clean(load_df("data/DKHousingPricesSample100k.csv"))
 features, target = choose_features(df)
 
-# Hjælpefunktion
+# Helper function
 def get_feature_names(pipe):
     prep = pipe.named_steps["prep"]
     num_f = prep.transformers_[0][2]
@@ -16,7 +16,7 @@ def get_feature_names(pipe):
     return list(num_f) + list(cat_f)
 
 
-# 1️⃣ Linear Regression (baseline)
+# Linear Regression (baseline)
 lr = joblib.load("models/baseline_lr.joblib")["pipeline"]
 lr_features = get_feature_names(lr)
 lr_model = lr.named_steps["model"]
@@ -31,7 +31,7 @@ plt.savefig("reports/lr_coefficients.png", dpi=300)
 plt.show()
 
 
-# 2️⃣ Random Forest
+# Random Forest
 rf = joblib.load("models/rf_model.joblib")["pipeline"]
 rf_features = get_feature_names(rf)
 rf_model = rf.named_steps["model"]

@@ -24,18 +24,18 @@ if __name__ == "__main__":
     parser.add_argument("--out", type=str, default="models/gb_model.joblib")
     args = parser.parse_args()
 
-    # Load and clean
+    # Loads and cleans data
     df = basic_clean(load_df(args.data))
     features, target = choose_features(df)
-    df = df.dropna(subset=features + [target])  # remove missing data for fairness
+    df = df.dropna(subset=features + [target])  # removes missing data for fairness
 
-    # Split data
+    # Splits data
     train, valid, test = time_split(df)
     Xtr, ytr = train[features], train[target]
     Xva, yva = valid[features], valid[target]
     Xte, yte = test[features], test[target]
 
-    # Separate feature types
+    # Separates feature types
     num_f = Xtr.select_dtypes(include="number").columns.tolist()
     cat_f = Xtr.select_dtypes(exclude="number").columns.tolist()
 
@@ -57,13 +57,13 @@ if __name__ == "__main__":
         ))
     ])
 
-    # Train model
+    # Trains model
     pipe.fit(Xtr, ytr)
 
-    # Evaluate
+    # Evaluates
     report("VALID", yva, pipe.predict(Xva))
     report("TEST", yte, pipe.predict(Xte))
 
-    # Save
+    # Saves
     joblib.dump({"pipeline": pipe, "features": features, "y": target}, args.out)
     print(f"Saved -> {args.out}")

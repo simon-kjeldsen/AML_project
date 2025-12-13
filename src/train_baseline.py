@@ -23,13 +23,23 @@ if __name__ == "__main__":
     os.makedirs("models", exist_ok=True)
 
     df = basic_clean(load_df(args.data))
-    features, num_f, cat_f, target = choose_features(df)
+    # Using only data from 2010-01-01 to 2024-12-31 if date is available
+    if "date" in df.columns:
+        df = df[(df["date"] >= "2008-01-01") & (df["date"] <= "2024-12-31")]
+    # Keeping only Villas and Apartments if the column exists
+    if "house_type" in df.columns:
+        df = df[df["house_type"].isin(["Villa", "Apartment"])]
+    features, target = choose_features(df)
     df = df.dropna(subset=features+[target])
 
     train, valid, test = time_split(df)
     Xtr, ytr = train[features], train[target]
     Xva, yva = valid[features], valid[target]
     Xte, yte = test[features],  test[target]
+
+    # Numeric and categorical feature lists from training data
+    num_f = Xtr.select_dtypes(include="number").columns.tolist()
+    cat_f = Xtr.select_dtypes(exclude="number").columns.tolist()
 
     prep = ColumnTransformer(
         [("num", StandardScaler(), num_f),
