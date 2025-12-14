@@ -19,9 +19,7 @@ def basic_clean(df: pd.DataFrame) -> pd.DataFrame:
         "house_id",
         "address",
         "quarter",
-        "%_change_between_offer_and_purchase",
         "purchase_price",  # since we use sqm_price as target
-        "area"  # redundant with region
     ]
     df = df.drop(columns=[c for c in drop_cols if c in df.columns], errors="ignore")
 
@@ -30,10 +28,11 @@ def basic_clean(df: pd.DataFrame) -> pd.DataFrame:
 def choose_features(df: pd.DataFrame):
     num = [c for c in ["sqm","no_rooms","year_build",
                        "nom_interest_rate%","dk_ann_infl_rate%",
-                       "yield_on_mortgage_credit_bonds%"] if c in df.columns]
-    cat = [c for c in ["house_type","sales_type","region","zip_code","city"] if c in df.columns]
+                       "yield_on_mortgage_credit_bonds%", "%_change_between_offer_and_purchase"] if c in df.columns]
+    cat = [c for c in ["house_type","sales_type","region","zip_code","city", "area"] if c in df.columns]
     target = "sqm_price"
     features = num + cat
+    features = [f for f in features if df[f].nunique() > 1]
     return features, target
 
 
