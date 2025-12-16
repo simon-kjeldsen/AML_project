@@ -38,12 +38,11 @@ if __name__ == "__main__":
         df = df[(df["sqm_price"] > 1000) & (df["sqm_price"] < 100000)]
     
     # Filter unrealistic construction years
-    if "year_build" in df.columns:
-        df = df[(df["year_build"] > 1850) & (df["year_build"] < 2025)]
-    
-    # Building age
-    if "year_build" in df.columns:
-        df["building_age"] = 2025 - df["year_build"]
+    if {"year_build", "date"}.issubset(df.columns):
+        df = df[(df["year_build"] > 1850) & (df["year_build"] <= df["date"].dt.year)]
+        
+    # Converting to building age    
+        df["building_age"] = df["date"].dt.year - df["year_build"]
 
     
     result = choose_features(df)
@@ -63,26 +62,26 @@ if __name__ == "__main__":
     print(f"  Total (after cleaning): {len(df):,}")
 
 
-      # Avg price per ZIP
+    # Avg price per ZIP
     if "zip_code" in train.columns and "sqm_price" in train.columns:
         avg_price_per_zip = train.groupby("zip_code")["sqm_price"].mean()
         for part in [train, valid, test]:
             part["avg_zip_price"] = part["zip_code"].map(avg_price_per_zip)
-            part["avg_zip_price"] = part["avg_zip_price"].fillna(train["avg_zip_price"].mean())
+            part["avg_zip_price"] = part["avg_zip_price"].fillna(avg_price_per_zip.mean())
 
     # Avg price per CITY
     if "city" in train.columns and "sqm_price" in train.columns:
         avg_price_per_city = train.groupby("city")["sqm_price"].mean()
         for part in [train, valid, test]:
             part["avg_city_price"] = part["city"].map(avg_price_per_city)
-            part["avg_city_price"] = part["avg_city_price"].fillna(train["avg_city_price"].mean())
+            part["avg_city_price"] = part["avg_city_price"].fillna(avg_price_per_city.mean())
 
     # Avg price per REGION
     if "region" in train.columns and "sqm_price" in train.columns:
         avg_price_per_region = train.groupby("region")["sqm_price"].mean()
         for part in [train, valid, test]:
             part["avg_region_price"] = part["region"].map(avg_price_per_region)
-            part["avg_region_price"] = part["avg_region_price"].fillna(train["avg_region_price"].mean())
+            part["avg_region_price"] = part["avg_region_price"].fillna(avg_price_per_region.mean())
 
 
 

@@ -28,7 +28,7 @@ def basic_clean(df: pd.DataFrame) -> pd.DataFrame:
 def choose_features(df: pd.DataFrame):
     num = [c for c in ["sqm","no_rooms","year_build",
                        "nom_interest_rate%","dk_ann_infl_rate%",
-                       "yield_on_mortgage_credit_bonds%", "%_change_between_offer_and_purchase"] if c in df.columns]
+                       "yield_on_mortgage_credit_bonds%"] if c in df.columns]
     cat = [c for c in ["house_type","sales_type","region","zip_code","city", "area"] if c in df.columns]
     target = "sqm_price"
     features = num + cat
