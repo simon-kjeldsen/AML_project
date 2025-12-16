@@ -83,7 +83,7 @@ if __name__ == "__main__":
 
     # Update feature list
 
-    features = ["sqm", "building_age", "avg_zip_price", "avg_city_price", "avg_region_price"]
+    features = ["sqm", "no_rooms", "building_age", "avg_zip_price", "avg_city_price", "avg_region_price"]
 
 
     Xtr, ytr = train[features], train[target]

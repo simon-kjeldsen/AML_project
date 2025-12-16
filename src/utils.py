@@ -19,16 +19,17 @@ def basic_clean(df: pd.DataFrame) -> pd.DataFrame:
         "house_id",
         "address",
         "quarter",
-        "purchase_price",  # since we use sqm_price as target
+        "purchase_price", # since we use sqm_price as target
+        "nom_interest_rate%",
+        "dk_ann_infl_rate%",
+        "yield_on_mortgage_credit_bonds%"  
     ]
     df = df.drop(columns=[c for c in drop_cols if c in df.columns], errors="ignore")
 
     return df
 
 def choose_features(df: pd.DataFrame):
-    num = [c for c in ["sqm","no_rooms","year_build",
-                       "nom_interest_rate%","dk_ann_infl_rate%",
-                       "yield_on_mortgage_credit_bonds%"] if c in df.columns]
+    num = [c for c in ["sqm","no_rooms","year_build"] if c in df.columns]
     cat = [c for c in ["house_type","sales_type","region","zip_code","city", "area"] if c in df.columns]
     target = "sqm_price"
     features = num + cat

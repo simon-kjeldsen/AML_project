@@ -25,7 +25,7 @@ if __name__ == "__main__":
 
      # Using only data from 2020-01-01 to 2024-12-31 if date is available
     if "date" in df.columns:
-        df = df[(df["date"] >= "2020-01-01") & (df["date"] <= "2024-12-31")]
+        df = df[(df["date"] >= "2020-01-01") & (df["date"] <= "2023-12-31")]
     # Keeping only Villas and Apartments if the column exists
     if "house_type" in df.columns:
         df = df[df["house_type"].isin(["Villa", "Apartment"])]

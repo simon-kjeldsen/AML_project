@@ -69,7 +69,7 @@ if __name__ == "__main__":
             part["avg_region_price"] = part["avg_region_price"].fillna(avg_price_per_region.mean())
 
     # Feature list
-    features = ["sqm", "building_age",
+    features = ["sqm", "building_age", "no_rooms",
                 "avg_zip_price", "avg_city_price", "avg_region_price"]
 
     Xtr, ytr = train[features], train[target]
