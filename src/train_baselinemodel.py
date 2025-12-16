@@ -22,7 +22,8 @@ if __name__ == "__main__":
 
     os.makedirs("models", exist_ok=True)
 
-    # Load and basic clean
+    # Basic cleaning 
+    
     df = basic_clean(load_df(args.data))
 
     # Keep realistic values
