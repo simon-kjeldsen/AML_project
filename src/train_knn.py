@@ -110,8 +110,8 @@ if __name__ == "__main__":
     pipe = Pipeline([
         ("prep", prep),
         ("model", KNeighborsRegressor(
-            n_neighbors=30,
-            weights="distance",
+            n_neighbors=50,
+            weights="uniform",
             p=1,          # Manhattan distance
             n_jobs=-1
         ))
@@ -119,6 +119,7 @@ if __name__ == "__main__":
 
     pipe.fit(Xtr, ytr)
 
+    report("TRAIN", ytr, pipe.predict(Xtr))
     report("VALID", yva, pipe.predict(Xva))
     report("TEST ", yte, pipe.predict(Xte))
 

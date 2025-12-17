@@ -119,6 +119,7 @@ if __name__ == "__main__":
 
     pipe.fit(Xtr, ytr)
 
+    report("TRAIN", ytr, pipe.predict(Xtr))
     report("VALID", yva, pipe.predict(Xva))
     report("TEST ", yte, pipe.predict(Xte))
 

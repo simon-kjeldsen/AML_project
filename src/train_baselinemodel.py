@@ -77,6 +77,7 @@ if __name__ == "__main__":
 
     # Evaluate
     print("\n--- BASELINE (simple) MODEL ---")
+    report("TRAIN", ytr, pipe.predict(Xtr))
     report("VALID", yva, pipe.predict(Xva))
     report("TEST ", yte, pipe.predict(Xte))
 
