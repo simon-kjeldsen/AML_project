@@ -96,8 +96,7 @@ if __name__ == "__main__":
 
     FEATURES_RF_CAT = [
         "house_type",
-        "sales_type",
-        "area"
+        "sales_type"
     ]
 
     FEATURES_RF = FEATURES_RF_NUM + FEATURES_RF_CAT
