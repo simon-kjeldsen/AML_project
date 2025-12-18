@@ -16,9 +16,9 @@ if __name__ == "__main__":
     parser.add_argument("--data", type=str, required=True)
     args = parser.parse_args()
 
-    # ----------------------------------
+    
     # Load & clean data (same as KNN)
-    # ----------------------------------
+    
     df = basic_clean(load_df(args.data))
 
     if "date" in df.columns:
@@ -60,9 +60,9 @@ if __name__ == "__main__":
     X = df[FEATURES_KNN]
     y = df[TARGET]
 
-    # ----------------------------------
+    
     # Pipeline
-    # ----------------------------------
+    
     pipe = Pipeline([
         ("prep", ColumnTransformer(
             [("num", StandardScaler(), FEATURES_KNN)],
@@ -75,9 +75,9 @@ if __name__ == "__main__":
         ))
     ])
 
-    # ----------------------------------
+    
     # Cross validation
-    # ----------------------------------
+    
     cv = KFold(n_splits=5, shuffle=True, random_state=42)
 
     scores = cross_val_score(

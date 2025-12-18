@@ -14,9 +14,9 @@ if __name__ == "__main__":
     parser.add_argument("--data", type=str, required=True)
     args = parser.parse_args()
 
-    # ----------------------------
+    
     # Load & clean data (same as baseline)
-    # ----------------------------
+    
     df = basic_clean(load_df(args.data))
 
     if "date" in df.columns:
@@ -31,17 +31,17 @@ if __name__ == "__main__":
 
     df = df.dropna(subset=FEATURES_BASELINE + [TARGET])
 
-    # ----------------------------
+    
     # Train / valid / test split
-    # ----------------------------
+    
     train, _, _ = time_split(df)
 
     Xtr = train[FEATURES_BASELINE]
     ytr = train[TARGET]
 
-    # ----------------------------
+    
     # Pipeline (same as baseline model)
-    # ----------------------------
+    
     prep = ColumnTransformer(
         transformers=[
             ("num", StandardScaler(), ["sqm"]),
@@ -55,9 +55,9 @@ if __name__ == "__main__":
         ("model", LinearRegression())
     ])
 
-    # ----------------------------
+    
     # 5-fold Cross Validation
-    # ----------------------------
+    
     cv = KFold(n_splits=5, shuffle=True, random_state=42)
 
     scores = cross_val_score(
@@ -66,7 +66,7 @@ if __name__ == "__main__":
         ytr,
         cv=cv,
         scoring="r2",
-        n_jobs=-1
+        n_jobs=1
     )
 
     print("Baseline CV R2 scores:", scores)

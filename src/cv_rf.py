@@ -14,9 +14,9 @@ if __name__ == "__main__":
     parser.add_argument("--data", type=str, required=True)
     args = parser.parse_args()
 
-    # --------------------------------------------------
+    
     # Load + basic cleaning (samme som train_rf.py)
-    # --------------------------------------------------
+    
     df = basic_clean(load_df(args.data))
 
     if "date" in df.columns:
@@ -31,18 +31,18 @@ if __name__ == "__main__":
     if "sqm_price" in df.columns:
         df = df[(df["sqm_price"] > 1000) & (df["sqm_price"] < 100000)]
 
-    # --------------------------------------------------
+    
     # Feature engineering
-    # --------------------------------------------------
+    
     if {"year_build", "date"}.issubset(df.columns):
         df = df[(df["year_build"] > 1850) & (df["year_build"] <= df["date"].dt.year)]
         df["building_age"] = df["date"].dt.year - df["year_build"]
 
     TARGET = "sqm_price"
 
-    # --------------------------------------------------
+    
     # Target encoding (global – OK til CV)
-    # --------------------------------------------------
+    
     for col, new_col in [
         ("zip_code", "avg_zip_price"),
         ("city", "avg_city_price"),
@@ -53,9 +53,9 @@ if __name__ == "__main__":
             df[new_col] = df[col].map(means)
             df[new_col] = df[new_col].fillna(means.mean())
 
-    # --------------------------------------------------
+    
     # Features (samme som RF-træning)
-    # --------------------------------------------------
+    
     FEATURES_RF_NUM = [
         "sqm",
         "no_rooms",
@@ -77,9 +77,9 @@ if __name__ == "__main__":
     X = df[FEATURES_RF]
     y = df[TARGET]
 
-    # --------------------------------------------------
+    
     # Pipeline
-    # --------------------------------------------------
+    
     prep = ColumnTransformer(
         transformers=[
             ("num", StandardScaler(), FEATURES_RF_NUM),
@@ -99,9 +99,9 @@ if __name__ == "__main__":
         ))
     ])
 
-    # --------------------------------------------------
+    
     # 5-fold cross validation
-    # --------------------------------------------------
+    
     cv = KFold(n_splits=5, shuffle=True, random_state=42)
 
     scores = cross_val_score(
@@ -110,7 +110,7 @@ if __name__ == "__main__":
         y,
         cv=cv,
         scoring="r2",
-        n_jobs=-1
+        n_jobs=1
     )
 
     print("CV R2 scores:", np.round(scores, 3))

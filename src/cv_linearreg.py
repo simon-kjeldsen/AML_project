@@ -12,9 +12,9 @@ if __name__ == "__main__":
     parser.add_argument("--data", type=str, required=True)
     args = parser.parse_args()
 
-    # --------------------------------------------------
+    
     # Load + clean data (same as training)
-    # --------------------------------------------------
+    
     df = basic_clean(load_df(args.data))
 
     if "date" in df.columns:
@@ -34,10 +34,10 @@ if __name__ == "__main__":
         df = df[(df["year_build"] > 1850) & (df["year_build"] <= df["date"].dt.year)]
         df["building_age"] = df["date"].dt.year - df["year_build"]
 
-    # --------------------------------------------------
+    
     # Train / validation / test split
     # (CV uses TRAIN only)
-    # --------------------------------------------------
+    
     train, _, _ = time_split(df)
 
     TARGET = "sqm_price"
@@ -58,9 +58,9 @@ if __name__ == "__main__":
         train["avg_region_price"] = train["region"].map(avg_region_price)
         train["avg_region_price"] = train["avg_region_price"].fillna(avg_region_price.mean())
 
-    # --------------------------------------------------
+    
     # Features (same as Linear Regression model)
-    # --------------------------------------------------
+    
     FEATURES_LR = [
         "sqm",
         "no_rooms",
@@ -75,9 +75,9 @@ if __name__ == "__main__":
     X = train[FEATURES_LR]
     y = train[TARGET]
 
-    # --------------------------------------------------
+    
     # Pipeline
-    # --------------------------------------------------
+    
     pipe = Pipeline([
         ("prep", ColumnTransformer(
             [("num", StandardScaler(), FEATURES_LR)],
@@ -86,9 +86,9 @@ if __name__ == "__main__":
         ("model", LinearRegression())
     ])
 
-    # --------------------------------------------------
+    
     # 5-fold Cross Validation
-    # --------------------------------------------------
+    
     cv = KFold(n_splits=5, shuffle=True, random_state=42)
 
     scores = cross_val_score(
@@ -97,7 +97,7 @@ if __name__ == "__main__":
         y,
         cv=cv,
         scoring="r2",
-        n_jobs=-1
+        n_jobs=1
     )
 
     print("CV R2 scores:", np.round(scores, 3))
