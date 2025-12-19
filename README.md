@@ -4,7 +4,7 @@ This repository contains the code for an Applied Machine Learning project focuse
 
 ## Setup
 
-The code was executed in a standard Python environment. Required packages are listed in `requirements.txt`.
+The code was executed in a standard Python environment. Required packages are listed in `requirements.txt`. Install with the following command: pip install -r requirements.txt
 
 ## Data 
 
